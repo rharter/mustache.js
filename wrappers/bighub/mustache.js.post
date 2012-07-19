@@ -1,0 +1,26 @@
+
+/**
+ * High-level API for rendering the `template` using the given `view`.  The
+ * optional `partials` object may be given here for convenience, but note that
+ * it will cause all partials to be re-compiled, thus hurting performance. Of
+ * course, this only matters if you're going to render the same template more
+ * than once. If so, it is best to call `compilePartial` before calling this
+ * function and to leave the `partials` argument blank.
+ * 
+ * @param {string} template The name of the template file to render, or the text
+ *                           of a template.
+ * @param {object} view The values to use in the context of the template.
+ * @param {string[]} partials I'm not really sure...
+ */
+ui.mustache.render = function(template, view, partials) {
+	view = view || {};
+
+	// Read the teplate from a file if it exists.
+	var template_path = bighub.global.root + '/app/views/' + template + '.mustache';
+	var template_file = new Packages.java.io.File(template_path);
+	if (template_file.exists()) {
+		template = new Packages.java.util.Scanner(template_file).useDelimiter("\\Z").next() + '';
+	}
+	
+	return Mustache.render(template, view, partials);
+}
